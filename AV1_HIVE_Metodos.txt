@@ -1,0 +1,13 @@
+use Reservas;
+
+// Listar Carros Disponíveis
+select * from Reserva
+where   LojaId = 1
+  and   CarroId = 1
+  and   ClienteId is null ;
+
+// Reservar Carro
+update Reserva
+set ClienteId = 2
+where LojaId = 1
+  and CarroId = 1;

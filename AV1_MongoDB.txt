@@ -1,0 +1,26 @@
+use Reservas;
+
+db.createCollection('Loja');
+db.createCollection('Carro');
+db.createCollection('Reserva');
+db.createCollection('Cliente');
+
+// Listar Carros Disponíveis
+db.Reserva.find(
+    { 
+        LojaId : 1, 
+        CarroId : 1,
+        ClienteId : { $exists: false }
+    }
+);
+
+// Realizar a reserva
+db.Reserva.update(
+{ 
+  LojaId : 1, 
+  CarroId : 1
+},
+{ 
+  $set : { ClienteId : 2}
+}
+);

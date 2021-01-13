@@ -1,0 +1,97 @@
+create database if not exists Reservas;
+use Reservas;
+
+CREATE TABLE IF NOT EXISTS Reservas.Cliente 
+( id BIGINT,
+  nome STRING
+)
+ROW FORMAT SERDE
+    'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+WITH SERDEPROPERTIES (
+    'separatorChar' = ';',
+    'quoteChar' = '"',
+    'escapeChar' = '\\')
+STORED AS INPUTFORMAT
+    'org.apache.hadoop.mapred.TextInputFormat'
+OUTPUTFORMAT
+    'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
+LOCATION
+    'hdfs://sandbox-hdp.hortonworks.com:8020/data/databases/Reservas/Cliente'
+TBLPROPERTIES (
+    'serialization.null.format' = '',
+    'skip.header.line.count' = '1');
+	
+
+CREATE TABLE IF NOT EXISTS Reservas.Loja 
+( id BIGINT,
+  endereco STRING,
+  cidade STRING
+)
+ROW FORMAT SERDE
+    'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+WITH SERDEPROPERTIES (
+    'separatorChar' = ';',
+    'quoteChar' = '"',
+    'escapeChar' = '\\')
+STORED AS INPUTFORMAT
+    'org.apache.hadoop.mapred.TextInputFormat'
+OUTPUTFORMAT
+    'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
+LOCATION
+    'hdfs://sandbox-hdp.hortonworks.com:8020/data/databases/Reservas/Loja'
+TBLPROPERTIES (
+    'serialization.null.format' = '',
+    'skip.header.line.count' = '1'); 
+
+CREATE TABLE IF NOT EXISTS Reservas.Reserva 
+( id BIGINT,
+  LojaId BIGINT,
+  CarroId BIGINT,
+  ClienteId BIGINT
+)
+ROW FORMAT SERDE
+    'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+WITH SERDEPROPERTIES (
+    'separatorChar' = ';',
+    'quoteChar' = '"',
+    'escapeChar' = '\\')
+STORED AS INPUTFORMAT
+    'org.apache.hadoop.mapred.TextInputFormat'
+OUTPUTFORMAT
+    'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
+LOCATION
+    'hdfs://sandbox-hdp.hortonworks.com:8020/data/databases/Reservas/Reserva'
+TBLPROPERTIES (
+    'serialization.null.format' = '',
+    'skip.header.line.count' = '1');  
+
+CREATE TABLE IF NOT EXISTS Reservas.Carro 
+(  id BIGINT,
+  LojaId BIGINT,
+  Marca STRING,
+  Modelo STRING,
+  Ano BIGINT
+)
+ROW FORMAT SERDE
+    'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+WITH SERDEPROPERTIES (
+    'separatorChar' = ';',
+    'quoteChar' = '"',
+    'escapeChar' = '\\')
+STORED AS INPUTFORMAT
+    'org.apache.hadoop.mapred.TextInputFormat'
+OUTPUTFORMAT
+    'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
+LOCATION
+    'hdfs://sandbox-hdp.hortonworks.com:8020/data/databases/Reservas/Carro'
+TBLPROPERTIES (
+    'serialization.null.format' = '',
+    'skip.header.line.count' = '1'); 
+
+
+
+
+
+
+
+
