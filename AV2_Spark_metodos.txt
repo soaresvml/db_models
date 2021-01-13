@@ -1,0 +1,26 @@
+//Número de clientes existem?
+
+%spark2.sql
+select count(c.idcliente) as qtdcli  from cliente c 
+groupby c.qtdcli
+
+
+//Quais clientes nunca alugaram um carro?
+
+%spark2.sql
+with
+(select c.idcliente, count(r.idreserva) as qtdreser  
+from cliente c 
+join reserva r on c.idcliente=r.clienteid
+having r.qtdreser = 0
+groupby r.qtdreser) as clisem
+select count(idcliente) as qtdsem from clisem;
+
+
+//Quantos carros estão alugados no momento e com quais clientes?
+
+%spark2.sql
+select c.nome, ca.marca, ca.modelo
+from reserva r 
+join cliente c on c.idcliente=r.clienteid
+join carro ca on ca.idcarro=r.carroid

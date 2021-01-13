@@ -1,0 +1,36 @@
+// cria um contexto do SparkQL
+val sqlcontext = new org.apache.spark.sql.SQLContext(sc);
+
+// cria um database 
+sqlcontext.sql("CREATE DATABASE IF NOT EXISTS Reservas LOCATION '/home/Reservas.db'");
+
+// cria as tabelas
+sqlcontext.sql("create table Reservas.Cliente (idcliente BIGINT, nome STRING) using orc");
+sqlcontext.sql("create table Reservas.Carro (idcarro BIGINT, lojaid BIGINT, marca STRING, modelo STRING, ano BIGINT) using orc");
+sqlcontext.sql("create table Reservas.Loja (idloja BIGINT, endereco STRING, cidade STRING) using orc");
+sqlcontext.sql("create table Reservas.reserva (idreserva BIGINT, lojaid BIGINT, carroid BIGINT,  clienteid BIGINT) using orc");
+
+// carrega os dados a partir de arquivos csv
+val fromCliente = sqlcontext.read
+             .option("header",true).option("delimiter",";")
+			 .csv("file:/home/cliente.csv");
+fromCliente.createOrReplaceTempView("ClienteTemp");
+sqlcontext.sql("insert into Reservas.Cliente select * from ClienteTemp");
+
+val fromCarro = sqlcontext.read
+             .option("header",true).option("delimiter",";")
+			 .csv("file:/home/carro.csv");
+fromCarro.createOrReplaceTempView("CarroTemp");
+sqlcontext.sql("insert into Reservas.Carro select * from CarroTemp");
+
+val fromLoja = sqlcontext.read
+             .option("header",true).option("delimiter",";")
+			 .csv("file:/home/loja.csv");
+fromLoja.createOrReplaceTempView("LojaTemp");
+sqlcontext.sql("insert into Reservas.Loja select * from LojaTemp");
+
+val fromReserva = sqlcontext.read
+             .option("header",true).option("delimiter",";")
+			 .csv("file:/home/reserva.csv");
+fromReserva.createOrReplaceTempView("ReservaTemp");
+sqlcontext.sql("insert into Reservas.Reserva select * from ReservaTemp");

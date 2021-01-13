@@ -1,0 +1,13 @@
+--listar carros disponíveis
+
+MATCH (l:loja)-[:TEM]->(ca:carro) 
+MATCH (c:cliente)-[:RESERVA]->(ca) 
+WITH l,ca,c
+WHERE c IS null
+return ca.marca,ca.modelo,ca:ano;
+
+
+--realiza reserva
+MATCH (ca:carro {marca : 'fiat', modelo: 'palio', ano: 2018})
+MATCH (c:cliente {nome : 'Jorge'}) 
+MERGE (c)-[:RESERVA]->(i);

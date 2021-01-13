@@ -1,0 +1,30 @@
+CREATE CONSTRAINT ON (c:cliente) ASSERT c.idcliente IS UNIQUE;
+CREATE CONSTRAINT ON (ca:carro) ASSERT c.idcarro IS UNIQUE;
+CREATE CONSTRAINT ON (l:loja) ASSERT c.idloja IS UNIQUE;
+CREATE CONSTRAINT ON (r:reserva) ASSERT c.idreserva IS UNIQUE;
+
+LOAD CSV WITH HEADERS 
+FROM "file:///cliente.csv" AS csvLine
+CREATE (c:cliente {idcliente: toInteger(csvLine.idcliente)
+				, nome  : csvLine.nome});
+
+LOAD CSV WITH HEADERS 
+FROM "file:///loja.csv" AS csvLine
+CREATE (l:loja {idloja: toInteger(csvLine.idloja)
+				, idloja  : toInteger(csvLine.idloja) 
+				, endereco  : csvLine.endereco 
+				, cidade  : csvLine.cidade});
+
+LOAD CSV WITH HEADERS 
+FROM "file:///carro.csv" AS csvLine
+MATCH (l:idloja {lojaid: toInteger(csvLine.lojaid)})
+CREATE (l)-[:TEM]->(ca:carro {idcarro: toInteger(csvLine.idcarro) 
+				, marca  : csvLine.marca 
+				, modelo  : csvLine.modelo 
+				, ano  : toInteger(csvLine.ano)});
+
+LOAD CSV WITH HEADERS 
+FROM "file:///reserva.csv" AS csvLine
+MATCH (c:idcliente {clienteid: toInteger(csvLine.clienteid)})
+MATCH (ca:idcarro {carroid: toInteger(csvLine.carroid)})
+CREATE (c)-[:RESERVA {idreserva: toInteger(csvLine.idreserva)}]->(ca)
